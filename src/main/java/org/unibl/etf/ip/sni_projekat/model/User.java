@@ -10,15 +10,27 @@ import java.util.List;
 @Data
 public class User {
 
+
     private Integer id;
+
     private String name;
+
     private String surname;
+
     private String username;
+
     private String password;
+
     private String email;
-    private Byte approved;
+
+    private String code;
+
     private Role role;
+
+    private Boolean activated;
+
     private List<CommentEntity> commentsById;
-    private List<PermissionEntity> permissions;
+
+ //   private List<PermissionEntity> permissions;
 
 }

@@ -47,26 +47,26 @@ public class UserEntity {
 
 
     @Basic
-    @Column(name = "approved")
-    private Byte approved;
-
-    @Basic
     @Column(name = "code")
     private String code;
+
     @Basic
-    @Column(name = "role_id")
-    private Integer roleId;
-
-
+    @Column(name = "role")
+    @Enumerated(EnumType.ORDINAL)
     private Role role;
+
+    @Basic
+    @Column(name = "activated")
+    private Boolean activated;
+
 
     @OneToMany(mappedBy = "userByUserId")
     private List<CommentEntity> commentsById;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+   /* @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_has_permission",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private List<PermissionEntity> permissions;
+    private List<PermissionEntity> permissions;*/
 }

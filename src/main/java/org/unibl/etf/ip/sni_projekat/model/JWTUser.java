@@ -4,9 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.unibl.etf.ip.sni_projekat.model.entities.PermissionEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +24,7 @@ public class JWTUser implements UserDetails {
     private String password;
     private Role role;
     private String token;
+    private List<PermissionEntity> permissions;
 
 
     public JWTUser(Integer id, String username, String password, Role role){
@@ -31,7 +36,13 @@ public class JWTUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.toString()));
+        for (PermissionEntity permission : permissions){
+            authorities.add(new SimpleGrantedAuthority(permission.getPermissionName()));
+        }
+        return authorities;
     }
 
 

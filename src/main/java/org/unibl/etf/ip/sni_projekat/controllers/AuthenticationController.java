@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.unibl.etf.ip.sni_projekat.model.JWTUser;
 import org.unibl.etf.ip.sni_projekat.model.LoginRequest;
 import org.unibl.etf.ip.sni_projekat.model.LoginResponse;
+import org.unibl.etf.ip.sni_projekat.model.User;
 import org.unibl.etf.ip.sni_projekat.services.AuthenticationService;
 
 @RestController
@@ -24,6 +25,14 @@ public class AuthenticationController {
 
     return authenticationService.login(request);
     }
+
+    @PostMapping("/register")
+    public User register(){
+        //TODO Napraviti za registraciju
+        return null;
+    }
+
+
 
     @GetMapping("/login")
     public String loginget(){

@@ -31,6 +31,6 @@ public class User {
 
     private List<CommentEntity> commentsById;
 
- //   private List<PermissionEntity> permissions;
+    private List<PermissionEntity> permissions;
 
 }

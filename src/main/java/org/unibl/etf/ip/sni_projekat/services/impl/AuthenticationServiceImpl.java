@@ -25,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final ModelMapper mapper;
 
-    @Value("9000")
+    @Value("90000")
     private String tokenExpirationDate;
 
     @Value("${authorization.token.secret}")
@@ -61,6 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     private String generateJWT(JWTUser user) {
-        return Jwts.builder().setId(user.getId().toString()).setSubject(user.getUsername()).claim("role", user.getRole().name()).setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(tokenExpirationDate))).signWith(SignatureAlgorithm.HS512, tokenSecert).compact();
+        System.out.println(user.getRole().toString());
+        return Jwts.builder().setId(user.getId().toString()).setSubject(user.getUsername()).claim("role", user.getRole().toString()).setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(tokenExpirationDate))).signWith(SignatureAlgorithm.HS512, tokenSecert).compact();
     }
 }

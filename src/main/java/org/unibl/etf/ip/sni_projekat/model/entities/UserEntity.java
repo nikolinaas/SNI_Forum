@@ -63,10 +63,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "userByUserId")
     private List<CommentEntity> commentsById;
 
-   /* @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_has_permission",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private List<PermissionEntity> permissions;*/
+    private List<PermissionEntity> permissions;
 }

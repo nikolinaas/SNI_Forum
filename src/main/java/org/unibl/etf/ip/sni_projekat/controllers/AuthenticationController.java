@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.unibl.etf.ip.sni_projekat.model.*;
+import org.unibl.etf.ip.sni_projekat.model.entities.UserEntity;
 import org.unibl.etf.ip.sni_projekat.services.AuthenticationService;
 
 @RestController
@@ -19,24 +20,28 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-   public JWTUser login(@RequestBody LoginRequest request) {
+    public UserEntity login(@RequestBody LoginRequest request) {
         System.out.print("llllllloooooooffffffffin");
 
-    return authenticationService.login(request);
+        return authenticationService.login(request);
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody UserRequest req){
+    public void register(@RequestBody UserRequest req) {
         authenticationService.register(req);
     }
 
 
 
-    @GetMapping("/login")
-    public String loginget(){
+    @PostMapping("/verifyCode/{id}")
+    public JWTUser verifyUser(@PathVariable Integer id, @RequestBody String code) {
 
-        return  "login";
+        return authenticationService.verifyCode(id, code);
+
     }
+
+
+
 
 }

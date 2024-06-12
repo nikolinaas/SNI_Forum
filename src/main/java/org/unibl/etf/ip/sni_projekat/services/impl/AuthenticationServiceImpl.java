@@ -3,9 +3,11 @@ package org.unibl.etf.ip.sni_projekat.services.impl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,13 +15,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.unibl.etf.ip.sni_projekat.exceptions.NotActivatedException;
+import org.unibl.etf.ip.sni_projekat.exceptions.WrongCredentialsException;
 import org.unibl.etf.ip.sni_projekat.model.*;
 import org.unibl.etf.ip.sni_projekat.model.entities.UserEntity;
 import org.unibl.etf.ip.sni_projekat.repositories.UserEntityRepository;
 import org.unibl.etf.ip.sni_projekat.services.AuthenticationService;
+import org.unibl.etf.ip.sni_projekat.services.EmailService;
 import org.unibl.etf.ip.sni_projekat.services.UserService;
 
+import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -33,48 +41,76 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final ModelMapper mapper;
 
+    private final EmailService emailService;
     private final UserEntityRepository userEntityRepository;
 
-    @Value("90000")
+    @Value("900000")//oduzeti nulu jednu poslije
     private String tokenExpirationDate;
 
     @Value("${authorization.token.secret}")
     private String tokenSecert;
 
-    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, ModelMapper mapper, UserEntityRepository userEntityRepository) {
+    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, ModelMapper mapper, EmailService emailService, UserEntityRepository userEntityRepository) {
 
 
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.mapper = mapper;
+        this.emailService = emailService;
         this.userEntityRepository = userEntityRepository;
     }
 
     @Override
-    public JWTUser login(LoginRequest request) {
+    public UserEntity login(LoginRequest request) {
+        UserEntity userEntity=null;
+        try{
 
         JWTUser user = null;
         Authentication authentication = null;
-        user = mapper.map(userService.findByUsername(request.getUsername()), JWTUser.class);
+
+            user = mapper.map(userService.findByUsername(request.getUsername()), JWTUser.class);
+
+
+
         try {
             System.out.println(request.getPassword());
-         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, request.getPassword(), user.getAuthorities()));
-           // JWTUser user = (JWTUser) authentication.getPrincipal();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, request.getPassword(), user.getAuthorities()));
 
-            user.setToken(generateJWT(user));
+
+            //  user.setToken(generateJWT(user));
         } catch (Exception ex) {
 
             ex.printStackTrace();
         }
 
-        return user;
+         userEntity = userEntityRepository.getById(user.getId());
+        if (!userEntity.getActivated()) {
+            userEntity = null;
+        } else {
+            int length = 24;
+            boolean useLetters = true;
+            boolean useNumbers = true;
+            String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
+            System.out.println(generatedString);
+            try {
+                emailService.sendVerificationEmail(userEntity.getEmail(), generatedString);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+            userEntity.setCode(generatedString);
+        }
+        }catch (Exception ex){
+            throw new WrongCredentialsException();
+        }
+        return userEntity;
     }
+
 
     @Override
     public void register(UserRequest request) {
 
-        UserEntity user = mapper.map(request,UserEntity.class);
+        UserEntity user = mapper.map(request, UserEntity.class);
 
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setActivated(false);
@@ -82,6 +118,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user = userEntityRepository.saveAndFlush(user);
         entityManager.refresh(user);
 
+    }
+
+    @Override
+    public JWTUser verifyCode(Integer id, String code) {
+        UserEntity user = userEntityRepository.getById(id);
+        JWTUser res = null;
+        Authentication authentication = null;
+        res = mapper.map(userService.findByUsername(user.getUsername()), JWTUser.class);
+        res.setToken(generateJWT(res));
+        System.out.println(user.getCode());
+        if (user.getCode().equals(code)) {
+            return res;
+        } else return null;
     }
 
 

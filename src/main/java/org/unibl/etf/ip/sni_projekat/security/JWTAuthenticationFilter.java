@@ -18,9 +18,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.unibl.etf.ip.sni_projekat.model.JWTUser;
 import org.unibl.etf.ip.sni_projekat.model.Role;
+import org.unibl.etf.ip.sni_projekat.model.User;
+import org.unibl.etf.ip.sni_projekat.model.entities.PermissionEntity;
+import org.unibl.etf.ip.sni_projekat.model.entities.UserEntity;
 import org.unibl.etf.ip.sni_projekat.services.JWTService;
+import org.unibl.etf.ip.sni_projekat.services.UserService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -32,6 +37,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private final JWTService jwtService;
+
+    @Autowired
+    private final UserService userService;
 
 
     @Override
@@ -47,16 +55,18 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         String token = authHeader.replace("Bearer", "");
         String user = jwtService.extractClaim(token, Claims::getSubject);
-        System.out.print(user);
+        System.out.print("JWTAuthenticationFilter user: " + user);
         if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             try {
                 Claims claims = Jwts.parserBuilder().setSigningKey(tokenSecret).build().parseClaimsJws(token)
                         .getBody();
-
-                JWTUser jwtUser = new JWTUser(Integer.valueOf(claims.getId()), claims.getSubject(), null, Role.valueOf(claims.get("role", String.class)));
+                UserEntity userEntity= userService.getById(Integer.valueOf(claims.getId())) ;
+//                System.out.println("Permisije ulogovanog korisnika: " +userEntity.getPermissions());
+                JWTUser jwtUser = new JWTUser(Integer.valueOf(claims.getId()), claims.getSubject(), null, Role.valueOf(claims.get("role", String.class)),claims.get("permissions", List.class));
                 if (jwtService.isTokenValid(token, jwtUser)) {
-                    System.out.println("validan token");
+                    System.out.println("validaaaan token");
+                    System.out.println( "Aithorities:" );
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUser, null, jwtUser.getAuthorities());
                     authentication.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request)
@@ -70,6 +80,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 
             } catch (Exception e) {
+                e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }

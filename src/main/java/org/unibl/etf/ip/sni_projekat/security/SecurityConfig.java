@@ -72,7 +72,10 @@ public class SecurityConfig  {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST,"/api/authentication/login").permitAll().
                          requestMatchers(HttpMethod.POST,"/api/authentication/register").permitAll().
-                         requestMatchers(HttpMethod.GET,"/api/themes/get").hasAuthority("ADMIN")
+                         requestMatchers(HttpMethod.GET,"/api/themes/get").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.GET,"/api/permissions/**").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.POST,"/api/authentication/verifyCode/**").permitAll()
 
 
 

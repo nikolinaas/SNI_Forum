@@ -27,11 +27,13 @@ public class JWTUser implements UserDetails {
     private List<PermissionEntity> permissions;
 
 
-    public JWTUser(Integer id, String username, String password, Role role){
+    public JWTUser(Integer id, String username, String password, Role role, List<PermissionEntity> permissions){
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
+        System.out.print("Permisions:" + permissions);
+        this.permissions = permissions;
     }
 
     @Override
@@ -39,9 +41,9 @@ public class JWTUser implements UserDetails {
 
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.toString()));
-        for (PermissionEntity permission : permissions){
+/*        for (PermissionEntity permission : permissions){
             authorities.add(new SimpleGrantedAuthority(permission.getPermissionName()));
-        }
+        }*/
         return authorities;
     }
 

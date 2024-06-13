@@ -94,7 +94,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
             System.out.println(generatedString);
             try {
-                emailService.sendVerificationEmail(userEntity.getEmail(), generatedString);
+                emailService.sendVerificationEmail(userEntity.getEmail(), generatedString, userEntity.getName());
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }

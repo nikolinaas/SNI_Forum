@@ -15,8 +15,10 @@ public interface UserService {
     public LoginResponse findByUsername(String username);
 
     public List<User> getUnacativeUsers();
+    public List<User> getActiveUsers();
 
     User getUserById(Integer id);
 
-    User activateUser(Integer id);
+    User activateUser(Integer id,User user);
+    User changePermissions(Integer id,User user);
 }

@@ -9,9 +9,6 @@ import org.unibl.etf.ip.sni_projekat.services.EmailService;
 import org.springframework.mail.javamail.JavaMailSender;
 import jakarta.mail.internet.MimeMessage;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -28,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendVerificationEmail(String to, String verificationCode) throws MessagingException {
+    public void sendVerificationEmail(String to, String verificationCode, String name) throws MessagingException {
         System.out.println(fromMail);
         System.out.println(pass);
         try{
@@ -36,17 +33,41 @@ public class EmailServiceImpl implements EmailService {
 
             var helper = new MimeMessageHelper(message, true);
 
-            helper.setSubject("Account verification, Online Fitness");
+            helper.setSubject("INTERNET FORUM,LOGIN VERIFICATION CODE");
 
 
 
-            helper.setText("Your login verification code is:  " + verificationCode,true);
+            helper.setText("Hello " + name +"\n" +"Your login verification code is:  " + verificationCode,true);
             helper.setFrom(fromMail);
             helper.setTo(to);
 
             this.mailSender.send(message);
             System.out.println("message");
             //       logService.info("New verification mail sent! To: " + to + ".");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("catch u servisu");
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void sendRegistrationEmail(String to, String name) throws MessagingException {
+        try{
+            MimeMessage message = mailSender.createMimeMessage();
+
+            var helper = new MimeMessageHelper(message, true);
+
+            helper.setSubject("INTERNET FORUM, APPROVED REGISTRATION");
+
+
+
+            helper.setText("Hello " + name + "\n"  + "Your registration is approved. Log in to checkout newest comments on our forum!");
+            helper.setFrom(fromMail);
+            helper.setTo(to);
+
+            this.mailSender.send(message);
+            System.out.println("message");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("catch u servisu");

@@ -74,6 +74,7 @@ public class SecurityConfig  {
                          requestMatchers(HttpMethod.POST,"/api/authentication/register").permitAll().
                          requestMatchers(HttpMethod.GET,"/api/themes/get").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.PUT,"/api/users/**").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET,"/api/permissions/**").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.POST,"/api/authentication/verifyCode/**").permitAll()
 

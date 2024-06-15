@@ -29,7 +29,7 @@ public class User {
 
     private Boolean activated;
 
-    private List<CommentEntity> commentsById;
+ //   private List<CommentEntity> commentsById;
 
     private List<PermissionEntity> permissions;
 

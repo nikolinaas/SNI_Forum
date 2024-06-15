@@ -73,7 +73,12 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST,"/api/authentication/login").permitAll().
                          requestMatchers(HttpMethod.POST,"/api/authentication/register").permitAll().
                          requestMatchers(HttpMethod.GET,"/api/themes/get").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.GET,"/api/comments/notApproved").hasAnyAuthority("ADMIN","MODERATOR").
+                        requestMatchers(HttpMethod.PUT,"/api/comments/approveComment/**").hasAnyAuthority("ADMIN","MODERATOR").
+                        requestMatchers(HttpMethod.GET,"/api/comments/notApproved").hasAnyAuthority("ADMIN","MODERATOR").
+                        requestMatchers(HttpMethod.GET,"/api/comments/approved/**").hasAnyAuthority("ADMIN","MODERATOR","USER").
                         requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.GET,"/api/users/unactive").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.PUT,"/api/users/**").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET,"/api/permissions/**").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.POST,"/api/authentication/verifyCode/**").permitAll()

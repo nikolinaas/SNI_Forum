@@ -88,6 +88,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User deactivateUser(Integer id, User user) {
+
+
+        if (!repository.existsById(id)) {
+            throw new NotFoundException();
+        }
+
+        UserEntity entity = mapper.map(user, UserEntity.class);
+        entity.setId(id);
+        entity = repository.saveAndFlush(entity);
+        entityManager.refresh(entity);
+
+
+        return mapper.map(entity, User.class);
+    }
+
+    @Override
     public User changePermissions(Integer id, User user) {
         if (!repository.existsById(id)) {
             throw new NotFoundException();

@@ -41,6 +41,11 @@ public class UserController {
     public User activateUser(@PathVariable Integer id,@RequestBody User user){
         return userService.activateUser(id,user);
     }
+    @PutMapping("/deactivateUser/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public User deactivateUser(@PathVariable Integer id,@RequestBody User user){
+        return userService.activateUser(id,user);
+    }
 
     @PutMapping("/changePermissions/{id}")
     @ResponseStatus(HttpStatus.OK)

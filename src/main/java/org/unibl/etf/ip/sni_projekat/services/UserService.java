@@ -20,5 +20,7 @@ public interface UserService {
     User getUserById(Integer id);
 
     User activateUser(Integer id,User user);
+
+    User deactivateUser(Integer id,User user);
     User changePermissions(Integer id,User user);
 }

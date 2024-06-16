@@ -1,6 +1,7 @@
 package org.unibl.etf.ip.sni_projekat.services;
 
 import org.unibl.etf.ip.sni_projekat.model.Comment;
+import org.unibl.etf.ip.sni_projekat.model.CommentRequest;
 import org.unibl.etf.ip.sni_projekat.model.entities.CommentEntity;
 
 import java.util.List;
@@ -12,4 +13,7 @@ public interface CommentService {
     Comment getCommentById(Integer id);
 
     List<Comment> getApprovedCommentsByTheme(Integer id);
+
+    Comment addComment(CommentRequest request);
+    Comment editComment(Integer id,Comment comment);
 }

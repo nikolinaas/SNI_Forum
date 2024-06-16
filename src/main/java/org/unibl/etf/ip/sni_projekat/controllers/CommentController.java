@@ -1,7 +1,9 @@
 package org.unibl.etf.ip.sni_projekat.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.unibl.etf.ip.sni_projekat.model.Comment;
+import org.unibl.etf.ip.sni_projekat.model.CommentRequest;
 import org.unibl.etf.ip.sni_projekat.model.entities.CommentEntity;
 import org.unibl.etf.ip.sni_projekat.services.CommentService;
 
@@ -36,5 +38,16 @@ public class CommentController {
     @PutMapping("/approveComment/{id}")
     public Comment approveComment(@PathVariable Integer id, @RequestBody Comment comment){
         return this.commentService.approveComment(id,comment);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public  Comment addComment(@RequestBody  CommentRequest req){
+        return commentService.addComment(req);
+    }
+
+    @PutMapping("/{id}")
+    public Comment editComment(@PathVariable Integer id, @RequestBody Comment comment){
+        return commentService.editComment(id,comment);
     }
 }

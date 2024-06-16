@@ -72,17 +72,20 @@ public class SecurityConfig  {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(HttpMethod.POST,"/api/authentication/login").permitAll().
                          requestMatchers(HttpMethod.POST,"/api/authentication/register").permitAll().
+                        requestMatchers(HttpMethod.GET,"/api/authentication/**").permitAll().
                          requestMatchers(HttpMethod.GET,"/api/themes/get").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET,"/api/comments/notApproved").hasAnyAuthority("ADMIN","MODERATOR").
                         requestMatchers(HttpMethod.PUT,"/api/comments/approveComment/**").hasAnyAuthority("ADMIN","MODERATOR").
                         requestMatchers(HttpMethod.GET,"/api/comments/notApproved").hasAnyAuthority("ADMIN","MODERATOR").
                         requestMatchers(HttpMethod.GET,"/api/comments/approved/**").hasAnyAuthority("ADMIN","MODERATOR","USER").
-                        requestMatchers(HttpMethod.GET,"/api/users/**").hasAuthority("ADMIN").
+                        requestMatchers(HttpMethod.POST,"/api/comments").hasAnyAuthority("ADMIN","MODERATOR","USER").
+                        requestMatchers(HttpMethod.PUT,"/api/comments/**").hasAnyAuthority("ADMIN","MODERATOR","USER").
+                        requestMatchers(HttpMethod.GET,"/api/users/**").hasAnyAuthority("ADMIN","MODERATOR","USER").
                         requestMatchers(HttpMethod.GET,"/api/users/unactive").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.PUT,"/api/users/**").hasAuthority("ADMIN").
                         requestMatchers(HttpMethod.GET,"/api/permissions/**").hasAuthority("ADMIN").
-                        requestMatchers(HttpMethod.POST,"/api/authentication/verifyCode/**").permitAll()
-
+                        requestMatchers(HttpMethod.POST,"/api/authentication/verifyCode/**").permitAll().
+                        requestMatchers(HttpMethod.POST,"/api/authentication/oauth2").permitAll()
 
 
                 )

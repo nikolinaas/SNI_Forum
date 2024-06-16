@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.unibl.etf.ip.sni_projekat.exceptions.NotFoundException;
 import org.unibl.etf.ip.sni_projekat.model.Comment;
+import org.unibl.etf.ip.sni_projekat.model.CommentRequest;
 import org.unibl.etf.ip.sni_projekat.model.User;
 import org.unibl.etf.ip.sni_projekat.model.entities.CommentEntity;
 import org.unibl.etf.ip.sni_projekat.model.entities.UserEntity;
@@ -62,6 +63,28 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getApprovedCommentsByTheme(Integer id) {
         return commentEntityRepository.findTop20ByApprovedAndThemeIdOrderByDateDesc(true,id).stream().map(el -> mapper.map(el,Comment.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Comment addComment(CommentRequest request) {
+        CommentEntity entity = mapper.map(request, CommentEntity.class);
+        entity.setId(null);
+        entity = commentEntityRepository.saveAndFlush(entity);
+        entityManager.refresh(entity);
+        return mapper.map(entity, Comment.class);
+    }
+
+    @Override
+    public Comment editComment(Integer id, Comment com) {
+        if (!commentEntityRepository.existsById(id)) {
+            throw new NotFoundException();
+        }
+
+        CommentEntity entity = mapper.map(com, CommentEntity.class);
+        entity.setId(id);
+        entity = commentEntityRepository.saveAndFlush(entity);
+        entityManager.refresh(entity);
+        return mapper.map(entity, Comment.class);
     }
 
 }

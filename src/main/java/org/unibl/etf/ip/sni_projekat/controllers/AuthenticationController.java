@@ -50,7 +50,7 @@ public class AuthenticationController {
     public User loginSuccess(@RequestBody String tokenId) {
 // Process user information and customize your logic
 
-        return oAuth2Service.oauth2login(tokenId);
+        return authenticationService.oauth2login(tokenId);
     }
 
 

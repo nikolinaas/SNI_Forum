@@ -36,6 +36,7 @@ public class CommentEntity {
     private Integer themeId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id",  nullable = false, insertable=false, updatable=false)
     private UserEntity userByUserId;
 

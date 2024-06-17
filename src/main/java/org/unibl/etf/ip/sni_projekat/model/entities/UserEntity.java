@@ -1,5 +1,6 @@
 package org.unibl.etf.ip.sni_projekat.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -60,8 +61,9 @@ public class UserEntity {
     private Boolean activated;
 
 
-    @OneToMany(mappedBy = "userByUserId")
-    private List<CommentEntity> commentsById;
+//    @OneToMany(mappedBy = "userByUserId", fetch = FetchType.LAZY )
+//    @JsonIgnore
+//    private List<CommentEntity> commentsById;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

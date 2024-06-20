@@ -13,7 +13,7 @@ import org.unibl.etf.ip.sni_projekat.services.OAuth2Service;
 
 @RestController
 @RequestMapping("/api/authentication")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

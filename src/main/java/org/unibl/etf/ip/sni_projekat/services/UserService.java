@@ -2,6 +2,7 @@ package org.unibl.etf.ip.sni_projekat.services;
 
 import org.unibl.etf.ip.sni_projekat.model.LoginResponse;
 import org.unibl.etf.ip.sni_projekat.model.User;
+import org.unibl.etf.ip.sni_projekat.model.UserRequest;
 import org.unibl.etf.ip.sni_projekat.model.entities.UserEntity;
 
 import java.util.List;
@@ -19,8 +20,8 @@ public interface UserService {
 
     User getUserById(Integer id);
 
-    User activateUser(Integer id,User user);
+    User activateUser(Integer id, UserRequest user);
 
-    User deactivateUser(Integer id,User user);
-    User changePermissions(Integer id,User user);
+    User deactivateUser(Integer id,UserRequest user);
+    User changePermissions(Integer id,UserRequest user);
 }

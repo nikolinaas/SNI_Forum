@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.unibl.etf.ip.sni_projekat.validation.sql.SQLValidation;
 
 import java.sql.Timestamp;
 import java.util.Objects;

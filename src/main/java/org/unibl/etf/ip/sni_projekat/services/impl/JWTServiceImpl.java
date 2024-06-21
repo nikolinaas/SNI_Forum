@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.unibl.etf.ip.sni_projekat.model.JWTUser;
+import org.unibl.etf.ip.sni_projekat.services.BlackListService;
 import org.unibl.etf.ip.sni_projekat.services.JWTService;
 
 import java.util.Date;
@@ -16,6 +17,11 @@ public class JWTServiceImpl implements JWTService {
     @Value("${authorization.token.secret}")
     private String secretKey;
 
+    private final BlackListService blackListService;
+
+    public JWTServiceImpl(BlackListService service) {
+        this.blackListService = service;
+    }
 
     @Override
     public Claims extractAllClaims(String token) {
@@ -36,8 +42,7 @@ public class JWTServiceImpl implements JWTService {
     @Override
     public Boolean isTokenValid(String token, JWTUser user) {
         String username = extractClaim(token, Claims::getSubject);
-        System.out.println(isTokenExpired(token));
-        return (user.getUsername().equals(username) && !isTokenExpired(token));
+        return (user.getUsername().equals(username) && !isTokenExpired(token) && blackListService.isTokenValid(token));
 
     }
 

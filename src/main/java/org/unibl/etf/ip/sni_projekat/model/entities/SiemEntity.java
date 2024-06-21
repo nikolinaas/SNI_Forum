@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 @Data
@@ -23,6 +24,6 @@ public class SiemEntity {
     private String content;
     @Basic
     @Column(name = "date")
-    private Timestamp date;
+    private Date date;
 
 }

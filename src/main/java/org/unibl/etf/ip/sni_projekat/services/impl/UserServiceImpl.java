@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.unibl.etf.ip.sni_projekat.exceptions.NotFoundException;
 import org.unibl.etf.ip.sni_projekat.model.LoginResponse;
 import org.unibl.etf.ip.sni_projekat.model.User;
+import org.unibl.etf.ip.sni_projekat.model.UserRequest;
 import org.unibl.etf.ip.sni_projekat.model.entities.UserEntity;
 import org.unibl.etf.ip.sni_projekat.repositories.UserEntityRepository;
 import org.unibl.etf.ip.sni_projekat.services.EmailService;
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User activateUser(Integer id, User user){
+    public User activateUser(Integer id, UserRequest user){
 
 
         if (!repository.existsById(id)) {
@@ -88,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deactivateUser(Integer id, User user) {
+    public User deactivateUser(Integer id, UserRequest user) {
 
 
         if (!repository.existsById(id)) {
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changePermissions(Integer id, User user) {
+    public User changePermissions(Integer id, UserRequest user) {
         if (!repository.existsById(id)) {
             throw new NotFoundException();
         }

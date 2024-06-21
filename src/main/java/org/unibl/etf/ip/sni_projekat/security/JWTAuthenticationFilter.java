@@ -54,6 +54,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.replace("Bearer", "");
+        token = token.replace(" ","");
         String user = jwtService.extractClaim(token, Claims::getSubject);
         System.out.print("JWTAuthenticationFilter user: " + user);
         if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {

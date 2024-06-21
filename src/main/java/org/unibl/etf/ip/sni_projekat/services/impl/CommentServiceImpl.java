@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment approveComment(Integer id,Comment com) {
+    public Comment approveComment(Integer id,CommentRequest com) {
         if (!commentEntityRepository.existsById(id)) {
             throw new NotFoundException();
         }
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment editComment(Integer id, Comment com) {
+    public Comment editComment(Integer id, CommentRequest com) {
         if (!commentEntityRepository.existsById(id)) {
             throw new NotFoundException();
         }

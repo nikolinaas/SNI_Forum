@@ -1,27 +1,23 @@
 package org.unibl.etf.ip.sni_projekat.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.unibl.etf.ip.sni_projekat.validation.sql.SQLValidation;
 import org.unibl.etf.ip.sni_projekat.validation.xss.XSSValidation;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 
-public class LoginRequest {
+public class TokenRequest {
 
     @NotBlank
+    @NotNull
     @SQLValidation
     @XSSValidation
-    private String username;
-    @NotBlank
-    @SQLValidation
-    @XSSValidation
-    private String password;
+    private String tokenId;
 
 }

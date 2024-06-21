@@ -8,12 +8,14 @@ import java.util.List;
 
 public interface CommentService {
     List<Comment> getAllNotApprovedComments();
-    Comment approveComment(Integer id,Comment com);
+
+    Comment approveComment(Integer id, CommentRequest com);
 
     Comment getCommentById(Integer id);
 
     List<Comment> getApprovedCommentsByTheme(Integer id);
 
     Comment addComment(CommentRequest request);
-    Comment editComment(Integer id,Comment comment);
+
+    Comment editComment(Integer id, CommentRequest comment);
 }

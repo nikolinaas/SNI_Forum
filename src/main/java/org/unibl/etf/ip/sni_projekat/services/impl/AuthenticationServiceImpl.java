@@ -91,29 +91,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             System.out.println(request.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user, request.getPassword(), user.getAuthorities()));
 
-
+            userEntity = userEntityRepository.getById(user.getId());
+            if (!userEntity.getActivated()) {
+                userEntity = null;
+            } else {
+                int length = 24;
+                boolean useLetters = true;
+                boolean useNumbers = true;
+                String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
+                System.out.println(generatedString);
+                try {
+                    emailService.sendVerificationEmail(userEntity.getEmail(), generatedString, userEntity.getName());
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+                userEntity.setCode(generatedString);
+            }
             //  user.setToken(generateJWT(user));
         } catch (Exception ex) {
 
-            ex.printStackTrace();
+            throw new WrongCredentialsException();
         }
 
-         userEntity = userEntityRepository.getById(user.getId());
-        if (!userEntity.getActivated()) {
-            userEntity = null;
-        } else {
-            int length = 24;
-            boolean useLetters = true;
-            boolean useNumbers = true;
-            String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
-            System.out.println(generatedString);
-            try {
-                emailService.sendVerificationEmail(userEntity.getEmail(), generatedString, userEntity.getName());
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
-            }
-            userEntity.setCode(generatedString);
-        }
+
         }catch (Exception ex){
             throw new WrongCredentialsException();
         }
